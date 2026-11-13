@@ -1,4 +1,21 @@
-# code-rag PoC (claude-context + Milvus + Ollama, すべてローカル)
+# code-rag PoC
+
+## ソフトウェア構成
+
+| 役割 | ソフトウェア | 版・取得元 |
+|---|---|---|
+| コーディングエージェント | Claude Code(CLI) | 評価は `claude -p --model haiku` |
+| 検索ツール(MCP) | `@zilliz/claude-context-mcp` | npm、`@latest`(リリースタグなし。版は固定していない) |
+| ベクトルデータベース | Milvus standalone(etcd・MinIO を含む) | v3.0.6、公式 compose |
+| 埋め込み実行環境 | Ollama | Docker イメージ、v0.40.16(GPU 版: `ollama-poc`、CPU 版: `ollama-cpu`) |
+| 埋め込みモデル | `nomic-embed-text`(768 次元) | Ollama |
+| 埋め込みモデル | EmbeddingGemma 2(`ggml-org/embeddinggemma-2-GGUF:Q8_0`) | Hugging Face、Ollama から取得 |
+| 評価スクリプト | Python(`eval/`) | CPython 3.14(`__pycache__` から推定) |
+
+- Docker と Node.js(`npx`)が必要。
+- Milvus・Ollama の接続先はすべて 127.0.0.1 に限定している。
+- 埋め込みの計算は Ollama で行い、索引は Milvus に置く。
+- 評価の質問・回答・検索結果の断片は Claude API に送られる。
 
 - **起動**: `docker compose -f milvus-standalone-docker-compose.yml up -d` と `docker start ollama-poc`(Ollama は Docker 版、ポート 11435)
 - **停止**: `docker compose -f milvus-standalone-docker-compose.yml down`(データは `./volumes` に残る)
