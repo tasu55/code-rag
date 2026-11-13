@@ -1,5 +1,13 @@
 # code-rag PoC
 
+## 概要
+
+Claude Code から、埋め込みベースのコード検索(claude-context)を使えるかを、手元の環境で試す PoC です。
+
+- **仕組み**: claude-context が対象コードをチャンクに分け、Ollama で埋め込みを計算して Milvus に保存します。Claude Code は MCP 経由の `search_code` で検索します。
+- **評価**: 21 問の質問(`eval/questions.json`)を、条件ごとに `claude -p`(Haiku)で解かせます。条件は、grep のみ、claude-context(指示なし)、claude-context(使うよう促す)を、埋め込みモデルごとに比べます。採点は、正解ファイル(`must_find`)が回答に出たかで行います。
+- **検索単体の評価**: LLM を使わず、質問文を検索クエリにして正解の順位を測ります(MRR など)。
+
 ## ソフトウェア構成
 
 | 役割 | ソフトウェア | 版・取得元 |
