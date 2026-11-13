@@ -3,6 +3,24 @@
 質問セットはリポジトリごとに用意する(既定は `questions.json`、`--questions` で差し替え)。
 別のリポジトリで使うときは、同じ形式の JSON を作り、`EVAL_REPO` と `--questions` を指定する。
 
+### 質問セットの形式
+
+`questions.json` は次の形です。例は `questions.example.json` を参照してください。
+
+```json
+{"questions": [
+  {"id": "E01", "type": "intent", "question": "…", "must_find": ["src/x.py"], "also_relevant": [], "note": ""}
+]}
+```
+
+- `id`: 一意な ID。
+- `type`: `intent`(識別子を使わず機能で聞く)、`identifier`(識別子で聞く)、`cross`(複数ファイルにまたがる)、`rationale`(設計判断)、`negative`(存在しない機能)のいずれか。
+- `must_find`: 正解ファイルのリポジトリ相対パス。`cross` の質問は全件が必要で、それ以外はどれか 1 件で正解。`negative` は空にする。
+- `also_relevant`: 関連するが採点には使わないファイル。
+- `note`: メモ。採点には使わない。
+- `negative` は「該当なし」と答えられれば正解。
+- 正解ファイルは `git grep` で裏取りしてから入れる。
+
 注意: `EVAL_REPO` には信頼できるリポジトリだけを指定する。`claude -p` は対象リポジトリの `.claude/settings.json`(フックや許可設定)を読み込むため、信頼できないリポジトリを指定すると、そこに書かれたコマンドが評価中に実行されるおそれがある。
 
 ```bash

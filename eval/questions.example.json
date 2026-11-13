@@ -1,0 +1,28 @@
+{
+  "questions": [
+    {
+      "id": "E01",
+      "type": "intent",
+      "question": "ユーザーのログイン失敗回数が上限を超えたら、アカウントを一時的にロックする処理はどこにある?",
+      "must_find": ["src/auth/lockout.py"],
+      "also_relevant": ["src/auth/login.py"],
+      "note": "識別子を使わず、機能で聞く例"
+    },
+    {
+      "id": "E02",
+      "type": "cross",
+      "question": "注文の確定時に、在庫の引き当てと決済の両方を呼んでいる箇所をすべて挙げて",
+      "must_find": ["src/orders/checkout.py", "src/orders/inventory_hook.py"],
+      "also_relevant": [],
+      "note": "cross は must_find の全件が必要"
+    },
+    {
+      "id": "E03",
+      "type": "negative",
+      "question": "このリポジトリで、二要素認証(TOTP)を実装している箇所はどこ?",
+      "must_find": [],
+      "also_relevant": [],
+      "note": "存在しない機能。「該当なし」と答えられるかを見る"
+    }
+  ]
+}
