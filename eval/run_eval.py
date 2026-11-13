@@ -115,7 +115,7 @@ def parse_stream(out):
                         results[c["tool_use_id"]] = str(v)
         elif t == "result":
             final = ev.get("result", "") or ""
-            meta = {k: ev.get(k) for k in ("total_cost_usd", "num_turns", "duration_ms", "is_error")}
+            meta = {k: ev.get(k) for k in ("total_cost_usd", "num_turns", "duration_ms", "is_error", "usage")}
     return calls, results, final, meta
 
 
@@ -254,7 +254,8 @@ def cmd_report(a):
     for p in sorted(RESULTS.glob("*.jsonl")):
         rows[p.stem] = [json.loads(l) for l in open(p)]
     types = ["intent", "identifier", "cross", "rationale", "negative"]
-    print(f'{"条件":<22}{"全体hit":>9}' + "".join(f"{t:>12}" for t in types) + f'{"平均calls":>10}{"search使用":>10}{"$合計":>8}')
+    print(f'{"条件":<22}{"全体hit":>9}' + "".join(f"{t:>12}" for t in types)
+          + f'{"平均calls":>10}{"search使用":>10}{"入力計(万)":>11}{"出力計(万)":>11}{"$合計":>8}')
     for cond, rs in rows.items():
         n = len(rs)
         hit = sum(r["hit"] for r in rs)
@@ -265,7 +266,12 @@ def cmd_report(a):
         calls = sum(r["n_calls"] for r in rs) / n
         used = sum(r["used_search"] for r in rs)
         cost = sum((r.get("total_cost_usd") or 0) for r in rs)
-        print(f"{cond:<22}{f'{hit}/{n}':>9}" + "".join(f"{x:>12}" for x in per) + f"{calls:>10.1f}{used:>10}{cost:>8.2f}")
+        u = [r.get("usage") or {} for r in rs]
+        inp = sum((x.get("input_tokens") or 0) + (x.get("cache_creation_input_tokens") or 0)
+                  + (x.get("cache_read_input_tokens") or 0) for x in u) / 1e4
+        out = sum(x.get("output_tokens") or 0 for x in u) / 1e4
+        print(f"{cond:<22}{f'{hit}/{n}':>9}" + "".join(f"{x:>12}" for x in per)
+              + f"{calls:>10.1f}{used:>10}{inp:>11.1f}{out:>11.2f}{cost:>8.2f}")
 
 
 if __name__ == "__main__":
