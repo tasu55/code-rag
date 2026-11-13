@@ -1,12 +1,11 @@
 # code-rag PoC (claude-context + Milvus + Ollama, すべてローカル)
 
-起動:  docker compose -f milvus-standalone-docker-compose.yml up -d ; docker start ollama-poc   (Ollama: Docker版、ポート11435)
-停止:  docker compose -f milvus-standalone-docker-compose.yml down   (データは ./volumes に残る)
-登録:  ./register-mcp.sh <repo> [model]
+- **起動**: `docker compose -f milvus-standalone-docker-compose.yml up -d` と `docker start ollama-poc`(Ollama は Docker 版、ポート 11435)
+- **停止**: `docker compose -f milvus-standalone-docker-compose.yml down`(データは `./volumes` に残る)
+- **登録**: `./register-mcp.sh <repo> [model]`
 - Milvus v3.0.6(公式 compose。ポートは 127.0.0.1 のみに公開に変更)
-- 旧 v2.5.4 の compose は MinIO イメージが取得できず milvus-v2.5.4-old.yml に退避
-- 埋め込み: Ollama nomic-embed-text(768 次元)。モデルは OLLAMA_MODEL で替える
-- CPUのみで測る場合: docker compose -p ollama-cpu -f docker-compose.ollama-cpu.yml up -d (ポート11436、既定は4コア/6GB)
+- 埋め込み: Ollama nomic-embed-text(768 次元)。モデルは `OLLAMA_MODEL` で替える
+- CPU のみで測る場合: `docker compose -p ollama-cpu -f docker-compose.ollama-cpu.yml up -d`(ポート 11436、既定は 4 コア / 6GB)
 
 ---
 
