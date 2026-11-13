@@ -1,4 +1,8 @@
 volumes/
 __pycache__/
 *.pyc
-eval/
+eval/results/
+eval/questions.json
+eval/mcp/
+eval/*.log
+eval/results.csv
