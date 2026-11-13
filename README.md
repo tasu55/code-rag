@@ -51,7 +51,7 @@ docker start ollama-poc                                         # Ollama GPU版(
 
 ### 2. 対象リポジトリに MCP を登録する(任意・手動で使うとき)
 ```bash
-./register-mcp.sh /home/tasuq/project/local-ai-tuber nomic-embed-text
+./register-mcp.sh <対象リポジトリの絶対パス> nomic-embed-text
 ```
 - 登録はそのディレクトリのローカルスコープ。リポジトリ本体は変更しない。
 - Claude Code を再起動し、`index_codebase` で索引化する。

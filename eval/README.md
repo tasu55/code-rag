@@ -1,7 +1,6 @@
 # 評価セット(質問 JSON と採点)
 
 質問セットはリポジトリごとに用意する(既定は `questions.json`、`--questions` で差し替え)。
-現在の `questions.json` は local-ai-tuber(21 問)向けで、正解ファイルは git grep で裏取り済み。
 別のリポジトリで使うときは、同じ形式の JSON を作り、`EVAL_REPO` と `--questions` を指定する。
 
 ```bash
