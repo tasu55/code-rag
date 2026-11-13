@@ -3,6 +3,8 @@
 質問セットはリポジトリごとに用意する(既定は `questions.json`、`--questions` で差し替え)。
 別のリポジトリで使うときは、同じ形式の JSON を作り、`EVAL_REPO` と `--questions` を指定する。
 
+注意: `EVAL_REPO` には信頼できるリポジトリだけを指定する。`claude -p` は対象リポジトリの `.claude/settings.json`(フックや許可設定)を読み込むため、信頼できないリポジトリを指定すると、そこに書かれたコマンドが評価中に実行されるおそれがある。
+
 ```bash
 export EVAL_REPO=/path/to/target-repo
 ./run_eval.py index --condition <名前> --embed-model nomic-embed-text
