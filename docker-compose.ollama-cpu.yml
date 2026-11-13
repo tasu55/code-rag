@@ -1,0 +1,19 @@
+# CPUのみのOllama(埋め込み専用)。コア数とメモリを制限して測れる。
+# 起動: docker compose -p ollama-cpu -f docker-compose.ollama-cpu.yml up -d
+# モデル取得: docker exec ollama-cpu ollama pull nomic-embed-text
+# 変更: OLLAMA_CPUS=4 OLLAMA_MEM=6g docker compose -f docker-compose.ollama-cpu.yml up -d
+services:
+  ollama-cpu:
+    image: ollama/ollama:latest   # 評価時は版を固定すること(PoCではv0.40.16)
+    container_name: ollama-cpu
+    ports:
+      - "127.0.0.1:11436:11434"   # ローカルのみ公開
+    environment:
+      - OLLAMA_KEEP_ALIVE=30m
+      - OLLAMA_NUM_PARALLEL=1
+    cpus: ${OLLAMA_CPUS:-4}
+    mem_limit: ${OLLAMA_MEM:-6g}
+    volumes:
+      - ollama-cpu:/root/.ollama
+volumes:
+  ollama-cpu:
